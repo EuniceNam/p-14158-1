@@ -1,4 +1,4 @@
-package com.back.p141581;
+package com.back;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
