@@ -1,9 +1,8 @@
 package com.back.global.initData;
 
 import com.back.domain.post.post.entity.Post;
-import com.back.domain.post.post.repository.PostRepository;
 import com.back.domain.post.post.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,15 +10,18 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Optional;
 
 @Configuration
+@RequiredArgsConstructor
 public class BaseInitData {
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
+    private int callCount = 0;
 
     @Bean
     ApplicationRunner baseInitDataApplicationRunner() {
         return args -> {
             work1();
             work2();
+
+            callCount++;
         };
     }
 
