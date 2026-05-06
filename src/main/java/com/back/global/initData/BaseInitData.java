@@ -60,4 +60,12 @@ public class BaseInitData {
         Optional<Post> opPost1 = postService.findById(1);
         // SELECT * FROM post WHERE id = 1;
     }
+
+    @Transactional
+    void work4() {
+        Optional<Post> opPost1 = postService.findById(1);
+        Post post1 = opPost1.get();
+
+        postService.modify(post1, "제목 1 수정", "내용 1 수정");
+    }
 }
