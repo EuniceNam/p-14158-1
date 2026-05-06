@@ -26,9 +26,18 @@ public class BaseInitData {
         return args -> {
             self.work1();
             self.work2();
+            self.work3();
 
             callCount++;
         };
+    }
+
+    @Transactional
+    void work3() {
+        Optional<Post> opPost1 = postService.findById(1);
+        Post post1 = opPost1.get();
+
+        postService.modify(post1, "제목 1 수정", "내용 1 수정");
     }
 
     @Transactional
