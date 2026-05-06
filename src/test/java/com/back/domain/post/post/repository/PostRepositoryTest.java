@@ -5,10 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 public class PostRepositoryTest {
     @Autowired
     private PostRepository postRepository;
@@ -33,5 +36,13 @@ public class PostRepositoryTest {
         assertThat(post.getId()).isGreaterThan(0);
         assertThat(post.getTitle()).isEqualTo("제목 new");
         assertThat(post.getContent()).isEqualTo("내용 new");
+    }
+
+    @Test
+    @DisplayName("글 개수 조회")
+    void t3() {
+        long count = postRepository.count();
+
+        assertThat(count).isEqualTo(2); // 현재 3개의 글이 있다고 가정
     }
 }
