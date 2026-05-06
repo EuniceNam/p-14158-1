@@ -19,7 +19,6 @@ public class BaseInitData {
     @Lazy
     private BaseInitData self;
     private final PostService postService;
-    private int callCount = 0;
 
     @Bean
     ApplicationRunner baseInitDataApplicationRunner() {
@@ -28,7 +27,7 @@ public class BaseInitData {
             self.work2();
             self.work3();
 
-            callCount++;
+            new Thread(() -> self.work3()).start(); // 별도의 Thread 를 사용한 이유 : work3 메서드에서 예외가 발생해도 스프링부트가 꺼지지 않도록
         };
     }
 
@@ -38,16 +37,22 @@ public class BaseInitData {
         Post post1 = opPost1.get();
 
         postService.modify(post1, "제목 1 수정", "내용 1 수정");
+
+        if (false) throw new RuntimeException("work3에서 예외 발생");
+
+        Optional<Post> opPost2 = postService.findById(2);
+        Post post2 = opPost2.get();
+
+        postService.modify(post2, "제목 2 수정", "내용 2 수정");
     }
 
     @Transactional
     void work1() {
-        if (postService.count() > 0) return;
-        Post post1 = new Post("제목 1", "내용 1");
-        postService.save(post1);
-        Post post2 = postService.save(new Post("제목 1", "내용 2"));
+        Post post1 = postService.write("제목 1", "내용 1");
+        Post post2 = postService.write("제목 2", "내용 2");
 
-        System.out.println("기본 데이터가 초기화되었습니다.");
+        System.out.println(post1.getId());
+        System.out.println(post2.getId());
     }
 
     @Transactional(readOnly = true)
