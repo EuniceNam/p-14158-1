@@ -1,0 +1,12 @@
+### 추가공부) JPA의 extends 구현 전략
+- 클로드 예시: Dog extends Animal {String breed}, Cat extends Animal {String color}
+  - SINGLE_TABLE(기본값): 한 테이블에서 DTYPE 컬럼으로 타입 구분하기
+    - Animal: 1 Dog 뽀삐 poodle null, 2 Cat 나비 null black
+    - 성능 우선, 자식 타입 적을 때
+  - JOINED(`@Inheritance(strategy = InheritanceType.JOINED)`): 별도 테이블로 PK 공유해 JOIN
+    - Animal: 1 뽀삐, 2 나비, Dog: 1 Poodle, Cat: 2 black
+    - 정규화 중요, 복잡한 도메인
+  - TABLE PER CLASS(위와 같이 지정 필요): 자식 테이블에 중복 포함해 독립 테이블로
+    - Dog: 1 뽀삐 Poodle, Cat: 2 나비 Black
+    - 단점: 부모 타입으로 조회시 UNION ALL 발생, 컬럼 중복. (비쌈)
+    - 자식 타입별 독립 쿼리가 많을 때

@@ -1,11 +1,12 @@
 package com.back.domain.post.post.repository;
 
+import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.repository.MemberRepository;
 import com.back.domain.post.post.entity.Post;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 public class PostRepositoryTest {
+    @Autowired
+    private MemberRepository memberRepository;
     @Autowired
     private PostRepository postRepository;
 
@@ -30,7 +33,8 @@ public class PostRepositoryTest {
     @Test
     @DisplayName("글 생성")
     void t2() {
-        Post post = new Post(1, "제목 new", "내용 new");
+        Member memberUser1 = memberRepository.findById(3).get();
+        Post post = new Post(memberUser1, "제목 new", "내용 new");
         assertThat(post.getId()).isEqualTo(0);
 
         postRepository.save(post);
